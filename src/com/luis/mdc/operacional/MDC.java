@@ -14,6 +14,10 @@ public class MDC {
         int primoAtual = 2;
         int mdc = 1;
 
+        if (todosOsNumerosSaoIguais()) {
+            return numeros[0];
+        }
+        
         while (numerosSaoDiferentesDeUm()) {
             if (primoAtualEhDivisorDeAlgumNumero(primoAtual)) {
                 if (primoAtualEhDivisorDeTodosOsNumeros(primoAtual)) {
@@ -27,6 +31,11 @@ public class MDC {
         }
 
         return mdc;
+    }
+    
+    private boolean todosOsNumerosSaoIguais() {
+        int primeiroNumero = numeros[0];
+        return Arrays.stream(numeros).allMatch(numero -> numero == primeiroNumero);
     }
 
     private boolean numerosSaoDiferentesDeUm() {
