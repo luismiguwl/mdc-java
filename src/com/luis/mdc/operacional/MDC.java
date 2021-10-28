@@ -5,28 +5,31 @@ import java.util.Arrays;
 public class MDC {
 
     private int[] numeros;
+    private int mdc;
+    private int primoAtual;
 
     public MDC(int[] numeros) {
         this.numeros = numeros;
+        mdc = 1;
+        primoAtual = 2;
     }
 
     public int calcular() {
-        int primoAtual = 2;
-        int mdc = 1;
-
         if (todosOsNumerosSaoIguais()) {
             return numeros[0];
         }
         
         while (numerosSaoDiferentesDeUm()) {
-            if (primoAtualEhDivisorDeAlgumNumero(primoAtual)) {
-                if (primoAtualEhDivisorDeTodosOsNumeros(primoAtual)) {
+            if (primoAtualEhDivisorDeAlgumNumero()) {
+                exibirMacete();
+                
+                if (primoAtualEhDivisorDeTodosOsNumeros()) {
                     mdc *= primoAtual;
                 }
 
-                dividirNumerosPeloPrimoAtual(primoAtual);
+                dividirNumerosPeloPrimoAtual();
             } else {
-                primoAtual = obterProximoPrimo(primoAtual);
+                primoAtual = obterProximoPrimo();
             }
         }
 
@@ -43,7 +46,7 @@ public class MDC {
                 .anyMatch(numero -> numero != 1);
     }
 
-    private void dividirNumerosPeloPrimoAtual(int primoAtual) {
+    private void dividirNumerosPeloPrimoAtual() {
         for (int i = 0; i < numeros.length; i++) {
             if (numeros[i] % primoAtual == 0) {
                 numeros[i] /= primoAtual;
@@ -51,17 +54,17 @@ public class MDC {
         }
     }
 
-    private boolean primoAtualEhDivisorDeAlgumNumero(int primoAtual) {
+    private boolean primoAtualEhDivisorDeAlgumNumero() {
         return Arrays.stream(numeros)
                 .anyMatch(numero -> numero % primoAtual == 0);
     }
 
-    private boolean primoAtualEhDivisorDeTodosOsNumeros(int primoAtual) {
+    private boolean primoAtualEhDivisorDeTodosOsNumeros() {
         return Arrays.stream(numeros)
                 .allMatch(numero -> numero % primoAtual == 0);
     }
 
-    private int obterProximoPrimo(int primoAtual) {
+    private int obterProximoPrimo() {
         int numeroAtual = primoAtual + 1;
 
         while (!numeroEhPrimo(numeroAtual)) {
@@ -85,6 +88,22 @@ public class MDC {
         }
 
         return true;
+    }
+    
+    private void exibirMacete() {
+        String[] numerosEmString = converterNumerosParaArrayDeString();
+        String macete = String.join(", ", numerosEmString) + " | " + primoAtual;
+        System.out.println(macete);
+    }
+    
+    private String[] converterNumerosParaArrayDeString() {
+        String[] array = new String[numeros.length];
+        
+        for (int i = 0; i < numeros.length; i++) {
+            array[i] = Integer.toString(numeros[i]);
+        }
+        
+        return array;
     }
 
 }
